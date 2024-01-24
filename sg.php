@@ -6,7 +6,7 @@ require_once($_SERVER['DOCUMENT_ROOT'].'/api/lib/Folder.class.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/api/lib/Notes.class.php');
 
 session_start();
-$_SESSION['username'] = 'abishekq';
+$_SESSION['username'] = 'abishek';
 
 try{
     print_r(Folder::getAllFolders());

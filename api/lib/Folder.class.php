@@ -1,17 +1,13 @@
 <?php
-
 require_once($_SERVER['DOCUMENT_ROOT'].'/api/lib/Database.class.php');
 require_once($_SERVER['DOCUMENT_ROOT'].'/api/lib/Share.class.php');
 require_once $_SERVER['DOCUMENT_ROOT'].'/vendor/autoload.php';
-
 use Carbon\Carbon;
-
 class Folder extends Share
 {
     private $db;
     private $data = null;
     private $id = null;
-
     public function __construct($id = null)
     {
         parent::__construct($id, 'folder');
@@ -21,21 +17,18 @@ class Folder extends Share
             $this->refresh();
         }
     }
-
     public function getName()
     {
         if ($this->data and isset($this->data['name'])) {
             return $this->data['name'];
         }
     }
-
     public function getId()
     {
         if ($this->id) {
             return $this->id;
         }
     }
-
     public function createdAt()
     {
         if ($this->data and isset($this->data['created_at'])) {
@@ -43,7 +36,6 @@ class Folder extends Share
             return $c->diffForHumans();
         }
     }
-
     public function createNew($name='Default Folder')
     {
         if (isset($_SESSION['username']) and strlen($name) >= 5 and strlen($name) <=45) {
@@ -56,7 +48,6 @@ class Folder extends Share
             throw new Exception("Cannot create default folderse");
         }
     }
-
     public function refresh()
     {
         if ($this->id != null) {
@@ -73,14 +64,12 @@ class Folder extends Share
             }
         }
     }
-
     public function getOwner()
     {
         if ($this->data and isset($this->data['owner'])) {
             return $this->data['owner'];
         }
     }
-
     public function rename($name)
     {
         if ($this->id) {
@@ -92,7 +81,6 @@ class Folder extends Share
             throw new Exception("Not found");
         }
     }
-
     public function getAllNotes()
     {
         $query = "SELECT * FROM notes WHERE folder_id=$this->id";
@@ -112,7 +100,6 @@ class Folder extends Share
             return [];
         }
     }
-
     public function countNotes()
     {
         $query = "SELECT COUNT(*) FROM notes WHERE folder_id=$this->id";
@@ -122,7 +109,6 @@ class Folder extends Share
             return $data['COUNT(*)'];
         }
     }
-
     public function delete()
     {
         if (isset($_SESSION['username']) and $this->getOwner() == $_SESSION['username']) {
@@ -131,7 +117,6 @@ class Folder extends Share
                 $n = new Notes($note['id']);
                 $n->delete();
             }
-
             if ($this->id) {
                 $query = "DELETE FROM `folders` WHERE (`id` = '$this->id');";
                 $result = mysqli_query($this->db, $query);
@@ -143,7 +128,6 @@ class Folder extends Share
             throw new Exception("Unauthorized");
         }
     }
-
     public static function getAllFolders()
     {
         $db = Database::getConnection();
